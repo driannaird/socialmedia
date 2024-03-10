@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
       return NextResponse.json({ data: newLike }, { status: 200 });
     } else {
-      const newLike = await prisma?.like.create({
+      const newLike = await db.like.create({
         data: {
           userId: parseInt(session.id),
           postId,
