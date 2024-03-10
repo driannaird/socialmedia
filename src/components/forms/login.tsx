@@ -13,6 +13,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().min(1, "Email wajib diisi").email("Email tidak valid"),
@@ -23,6 +27,8 @@ const formSchema = z.object({
 });
 
 const FormLogin = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -32,12 +38,24 @@ const FormLogin = () => {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    const signInData = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
+
+    if (signInData?.error) {
+      setLoading(false);
+      toast("Terjadi masalah, gagal login");
+    } else {
+      toast("Berhasil login");
+      setLoading(false);
+      router.refresh();
+      router.push("/");
+    }
+  };
 
   return (
     <Form {...form}>
@@ -75,8 +93,11 @@ const FormLogin = () => {
             Lupa kata sandi?
           </Link>
         </div>
-        <Button type="submit" className="bg-primary w-full hover:bg-partial">
-          Masuk
+        <Button
+          type="submit"
+          disabled={loading}
+          className="bg-primary w-full hover:bg-partial">
+          {loading ? "Loading..." : "Masuk"}
         </Button>
         <div className="relative flex items-center text-xs">
           <div className="flex-grow border-t"></div>

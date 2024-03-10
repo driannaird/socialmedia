@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 
 interface AuthProps {
   children: ReactNode;

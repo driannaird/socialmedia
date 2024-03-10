@@ -7,7 +7,7 @@ interface CoreLayoutProps {
 
 const CoreLayout: FC<CoreLayoutProps> = ({ children }) => {
   return (
-    <div className="w-full px-6">
+    <div className="w-full">
       {children}
       <NavbarComponent />
     </div>

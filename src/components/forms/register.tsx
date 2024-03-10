@@ -4,6 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 import Link from "next/link";
 import {
   Form,
@@ -13,6 +14,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useState } from "react";
 
 const formSchema = z
   .object({
@@ -33,6 +37,8 @@ const formSchema = z
     message: "Kata sandi dan konfirmasi kata sandi tidak sesuai",
   });
 const FormRegister = () => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,12 +50,23 @@ const FormRegister = () => {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    try {
+      await axios.post("/api/auth/register", {
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      });
+
+      toast("Berhasil membuat akun");
+      setLoading(false);
+      router.push("/auth/login");
+    } catch (error: any) {
+      setLoading(false);
+      return toast(error.response?.data?.message);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -108,8 +125,11 @@ const FormRegister = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-primary w-full hover:bg-partial">
-          Daftar
+        <Button
+          type="submit"
+          disabled={loading}
+          className="bg-primary w-full hover:bg-partial">
+          {loading ? "Loading..." : "Daftar"}
         </Button>
         <div className="relative flex items-center text-xs">
           <div className="flex-grow border-t"></div>
