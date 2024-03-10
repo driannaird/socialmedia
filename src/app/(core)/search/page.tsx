@@ -1,7 +1,7 @@
 import PostComponent from "@/components/posts";
 import { SearchComponent } from "@/components/search";
 
-const SearchPage = () => {
+const SearchPostsPage = () => {
   return (
     <>
       <SearchComponent />
@@ -12,4 +12,4 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+export default SearchPostsPage;
