@@ -6,7 +6,7 @@ const SearchPage = () => {
     <>
       <SearchComponent />
       <div className="px-6">
-        <PostComponent />
+        <PostComponent status="all" />
       </div>
     </>
   );
