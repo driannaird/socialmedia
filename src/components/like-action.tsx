@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import MenyalaIcon from "./icons/menyala";
 import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Heart } from "lucide-react";
+import { useSession } from "next-auth/react";
+import DialogLoginCompoenent from "./alertdialoglogin";
 
 const LikeActionComponent = ({
   like,
@@ -18,6 +20,7 @@ const LikeActionComponent = ({
   const [status, setStatus] = useState(like);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const session = useSession();
 
   const handleClick = async () => {
     setStatus(!status);
@@ -45,16 +48,27 @@ const LikeActionComponent = ({
   };
 
   return (
-    <div
-      onClick={handleClick}
-      className={`cursor-pointer ${
-        loading ? "animate-spin duration-1000" : null
-      }`}>
-      <MenyalaIcon
-        variants={status ? "full" : "outline"}
-        color={status ? undefined : "#323232"}
-      />
-    </div>
+    <>
+      {session.data?.user.email ? (
+        <div onClick={handleClick} className="cursor-pointer">
+          <Heart
+            fill={status ? "#FF0057" : "#ffffff"}
+            color={status ? "#FF0057" : "#323232"}
+          />
+        </div>
+      ) : (
+        <DialogLoginCompoenent>
+          <div className="cursor-pointer -mb-1">
+            <Heart
+              width={24}
+              height={24}
+              fill={status ? "#FF0057" : "#ffffff"}
+              color={status ? "#FF0057" : "#323232"}
+            />
+          </div>
+        </DialogLoginCompoenent>
+      )}
+    </>
   );
 };
 

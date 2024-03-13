@@ -50,9 +50,9 @@ const FormLogin = () => {
       setLoading(false);
       toast("Terjadi masalah, gagal login");
     } else {
+      router.refresh();
       toast("Berhasil login");
       setLoading(false);
-      router.refresh();
       router.push("/");
     }
   };

@@ -1,16 +1,15 @@
-import CommentIcon from "./icons/comment";
 import {
   Drawer,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { db } from "@/lib/db";
 import Image from "next/image";
 import { format } from "date-fns";
 import FormCommentComponent from "./form-comment";
+import CommentActionComponent from "./comment-action";
 
 const CommentsComponent = async ({ postId }: { postId: number }) => {
   const comments = await db.comment.findMany({
@@ -28,9 +27,7 @@ const CommentsComponent = async ({ postId }: { postId: number }) => {
   return (
     <>
       <Drawer>
-        <DrawerTrigger>
-          <CommentIcon variants="outline" color="#323232" />
-        </DrawerTrigger>
+        <CommentActionComponent />
         <DrawerContent className="max-w-[500px] mx-auto">
           <DrawerHeader>
             <DrawerTitle className="text-center">Komentar</DrawerTitle>

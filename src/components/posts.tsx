@@ -74,7 +74,6 @@ const PostComponent = async ({
               <LikesComponents postId={post.id} />
               <CommentsComponent postId={post.id} />
             </div>
-            <span className="text-xs">{post.like.length} orang menyala, </span>
             <span className="text-xs">
               {post?.comments.length} orang berkomentar
             </span>
