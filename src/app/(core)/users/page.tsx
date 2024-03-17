@@ -3,6 +3,7 @@ import PostComponent from "@/components/posts";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/session";
 import Image from "next/image";
+import { Suspense } from "react";
 
 const page = async () => {
   const session = await getCurrentUser();
@@ -31,7 +32,9 @@ const page = async () => {
         <span>Postingan Anda</span>
       </div>
       <div className="px-4">
-        <PostComponent status="byuser" authorId={parseInt(session!.id)} />
+        <Suspense fallback={<h1>Loading...</h1>}>
+          <PostComponent status="byuser" authorId={parseInt(session!.id)} />
+        </Suspense>
       </div>
     </>
   );
